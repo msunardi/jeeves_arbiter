@@ -11,30 +11,37 @@ nav_say = rospy.Publisher('/jeeves_speech/speech_synthesis', String, queue_size=
 prompt = ['Excellent choice .', 'Very good .', 'Certainly .', 'Of course .', 'Right . ', 'Naturally .', 'Indeed .', 'Obviously .', 'Indubitably .', 'Why, of course .', 'Marvelous .', 'Magnificent .']
 
 def handler(request):
-    print "Getting request: %s - %s" % (request.itype, request.value)
+    print "Getting request: %s - %s - %s" % (request.itype, request.value, request.description)
     itype = request.itype
     val = request.value
+    description = request.description
     response = "I don't know what you're asking"
     
     # Make decisions based on type
     if itype == 'nav':
         response = "Navigation request to: %s" % val
         p = r.choice(prompt)
-        nav_say.publish(p)
+        msg = r.choice(['Ah, ... ', '']) +  description + ', ...  ' + p
+        nav_say.publish(msg)
 
-        rospy.wait_for_service('waypoint')
-        # try:
-        #     wp = rospy.ServiceProxy('waypoint', Waypoint)
-        #     resp = wp(val)
-        #     return resp.output
-        # except rospy.ServiceException, e:
-        #     rospy.logerr("Unable to call service 'waypoint'.")
+        #rospy.wait_for_service('waypoint')
+        #rospy.loginfo("Attempting nav: %s" % val)
+        #print response
+        #try:
+        #    wp = rospy.ServiceProxy('waypoint', Waypoint)
+        #    resp = wp(val)
+        #    return resp.output
+        #except rospy.ServiceException, e:
+        #    rospy.logerr("Unable to call service 'waypoint'.")
+        #    print "Unable to call service. %s" % e
     elif itype == 'tour':
         response = "Tour request"
     elif itype == 'info':
         response = "Requesting info for: %s" % val
     elif itype == 'play':
         response = "Requesting play behavior"
+    
+    nav_say.publish(response)
 
     return InteractResponse(response)
     # return InteractResponse("Got foo -- itype: %s - value: %s" % (request.itype, request.value))
