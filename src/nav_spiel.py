@@ -38,7 +38,7 @@ def callback(message):
     # topic = "PORTLAND STATE"
     # topic = "INTEL LAB"
     topic = locations[message.data]
-    count = 2
+    count = 3
     rcvd = []   # Container for spiel
 
     jk_prob = 0.05
@@ -100,7 +100,7 @@ def done(message):
 
 def nav_spiel():
     rospy.init_node('nav_spiel', anonymous=True)
-    rospy.Subscriber("/chatter", String, callback)
+    rospy.Subscriber("/spiel", String, callback)
     rospy.Subscriber("/done", String, done)
 
     # spin() simply keeps python from exiting until this node is stopped
