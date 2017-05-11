@@ -212,7 +212,7 @@
          <li>When in doubt, mumble</li>
          <li>I intend to live forever. So far, so good</li>
          <li>The colors Red, White and Blue represent freedom -  Until they're flashing behind you</li>
-         <li>Arguing with your wife is like getting arrested. Anything you say can and will be used against you</li>
+         <!--li>Arguing with your wife is like getting arrested. Anything you say can and will be used against you</li-->
          <li>Whatever you do, always give your 100%. Unless you're donating blood</li>
          <li>The recipe said Set the oven to 180 degrees, so I did, but now I can't open it because the door faces the wall</li>
          <li>How many graduate students does it take to change a light bulb? Only one, but it takes nine years</li>
@@ -577,6 +577,39 @@
          <li>The laboratory is involved in the research on quantum and reversible computing as well as nano-technologies such as quantum dots and memristors.</li>
          <li>Quantum algorithms are developed in the Lab, for instance those used in robotics, thus defining a new research area of Quantum Robotics.</li>
          <li>Some of the Lab's interests include highly parallel robotics algorithms on GPU platforms, and emulation of problem-solving architectures with FPGAs and VELOCE emulator from Mentor.</li>
+      </random>
+   </template>
+</category>
+
+<category>
+   <pattern>BIOMEDICAL SIGNAL LAB</pattern>
+   <template>
+      <random>
+         <li>The mission of the BSP lab is to increase our collective knowledge of how useful information can be extracted from physiologic signals.</li>
+         <li>We primarily focus on clinical projects in which the extracted information can help physicians make better critical decisions and improve patient outcome.</li>
+      </random>
+   </template>
+</category>
+
+<category>
+   <pattern>NEAR LAB</pattern>
+   <template>
+      <random>
+         <li>The mission of the NEAR-Lab is to develop knowledge of electromagnetic and acoustic wave scattering and propagation phenomenon in order to devise and evaluate advanced signal processing techniques.</li>
+         <li>Applications are in the areas of radar, sonar, and biomedical.</li>
+      </random>
+   </template>
+</category>
+
+<category>
+   <pattern>EE FISHBOWL</pattern>
+   <template>
+      <random>
+         <li>Behind these glass doors are more laboratories, including: Teuscher lab, the capstone lab, High Frequency Design and Measurement Lab, IC Design and Test Laboratory, Terahertz Laboratory, and Verification Laboratory.</li>
+         <li>Across the room you can see the Circuit Lounge where students can relax or study.</li>
+         <li>To your right are the restrooms.</li>
+         <li>The hallway to my right leads you to the Tektronix Lab, and the Engineering and Technology Management Department.</li>
+         <li>The stairway nearby will take you to the exit on Fourth Avenue.</li>
       </random>
    </template>
 </category>

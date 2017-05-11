@@ -21,8 +21,10 @@ jeeves.respond('load aiml b') #finished initializing
 
 locations = {'ee': 'EE FISHBOWL', \
              'NEAR_lab': 'NEAR LAB', \
+             'near_lab': 'NEAR LAB', \
              'robot_lab': 'ROBOTICS LAB', \
-             'Biomedical_lab': 'BIOMEDICAL LAB', \
+             'Biomedical_lab': 'BIOMEDICAL SIGNAL LAB', \
+             'biomedical_lab': 'BIOMEDICAL SIGNAL LAB', \
              'stairs': 'EB STAIRS', \
              'portland_state': 'PORTLAND STATE'}
 
