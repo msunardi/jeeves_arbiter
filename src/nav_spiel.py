@@ -81,7 +81,7 @@ def callback(message):
                 rx = r.choice(comment[factjoke]) + '. ' + rx + '. ' + r.choice(comment['CLOSING'][factjoke])
                 rcvd.append(rx)
                 print rx
-    rcvd.append('And that is all I can say about %s. %s' % (topic, r.choice(comment['CLOSING']['END'])))
+    rcvd.append('And that is all I can say about %s %s. %s' % (topic, r.choice(['for now', '']), r.choice(comment['CLOSING']['END'])))
         
     for msg in rcvd:
         if not spiel:
@@ -90,6 +90,8 @@ def callback(message):
             festival(msg)
             break
         try:
+            while speaking:
+                pass
             festival(msg)
         except Exception as e:
             print e
@@ -97,26 +99,33 @@ def callback(message):
             sl = r.random()*0.5
             print "I'm done - sleeping for %s" % sl        
             time.sleep(sl)
-    spiel = False
-    
+    else:
+        spiel = False
     print "Arrived: %s" % arrived
-    while not arrived:
+    while not arrived and not spiel:
         try:
+            if arrived or spiel:
+                spiel = True
+                msg = "OK. I'll stop."
+                festival(msg)
+                break
             factjoke = r.choice(facts_or_jokes)
             rx = jeeves.respond(factjoke)
             rx = r.choice(comment[factjoke]) + '. ' + rx + '. ' + r.choice(comment['CLOSING'][factjoke])
+            
             while speaking and not arrived:
                 pass
-            if arrived:
-                spiel = True
-                break
+            if arrived and r.random() < 0.3:
+                break      
             festival(rx)
         except Exception as e:
             print e
         finally:
-            sl = r.random()
+            sl = r.random()*3.0
             print "Not arrived yet - sleeping for %s" % sl        
             time.sleep(sl)
+    arrived = False
+    spiel = True
 
 def done(message):
     global spiel
@@ -126,10 +135,10 @@ def done(message):
         spiel = False
 
 def goal_reached(message):
-    global place, arrived
+    global place, arrived, spiel, speaking
     print "Arrived: %s" % arrived
     if 'Goal reached' in message.data and not arrived:
-        arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the . . . %s']
+        arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the %s . . . ', 'This is the %s . . . ']
         msg = r.choice(arrive) % place
         while speaking or spiel:
             pass
@@ -149,6 +158,7 @@ def nav_spiel():
     rospy.Subscriber("/spiel", String, callback)
     rospy.Subscriber("/done", String, done)
     rospy.Subscriber("/move_base/result", String, goal_reached)
+    # rospy.Subscriber("/move_base/result", MoveBaseAction, goal_reached)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
    
