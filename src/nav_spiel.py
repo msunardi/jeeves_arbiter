@@ -26,21 +26,29 @@ locations = {'ee': 'EE FISHBOWL', \
              'Biomedical_lab': 'BIOMEDICAL SIGNAL LAB', \
              'biomedical_lab': 'BIOMEDICAL SIGNAL LAB', \
              'stairs': 'EB STAIRS', \
-             'portland_state': 'PORTLAND STATE'}
+             'portland_state': 'PORTLAND STATE', \
+             'portland_state_university': 'PORTLAND STATE'}
+
+facts_or_jokes = ['FACTS', 'JOKES']
 
 sub = rospy.Subscriber('chatter', String, queue_size=10)
 say = rospy.Publisher('/jeeves_speech/speech_synthesis', String, queue_size=10)
 
 spiel = True
+place = ''
+arrived = False
+speaking = False
 
 collect = 10
 
 def callback(message):
-    global spiel
+    global spiel, place, arrived
     # topic = "PORTLAND STATE"
     # topic = "INTEL LAB"
     topic = locations[message.data]
+    place = topic
     count = 3
+    arrived = False
     rcvd = []   # Container for spiel
 
     jk_prob = 0.05
@@ -67,7 +75,7 @@ def callback(message):
         # Insert random joke/fact
         ran = r.random()
         if ran < jk_prob:
-            factjoke = r.choice(['FACTS', 'JOKES'])
+            factjoke = r.choice(facts_or_jokes)
             rx = jeeves.respond(factjoke)
             if rx not in rcvd:
                 rx = r.choice(comment[factjoke]) + '. ' + rx + '. ' + r.choice(comment['CLOSING'][factjoke])
@@ -89,9 +97,26 @@ def callback(message):
             sl = r.random()*0.5
             print "I'm done - sleeping for %s" % sl        
             time.sleep(sl)
-
-def festival(say):
-    subprocess.call(["festival", "--batch", "(SayText \"" + say + "\")"])   
+    spiel = False
+    
+    print "Arrived: %s" % arrived
+    while not arrived:
+        try:
+            factjoke = r.choice(facts_or_jokes)
+            rx = jeeves.respond(factjoke)
+            rx = r.choice(comment[factjoke]) + '. ' + rx + '. ' + r.choice(comment['CLOSING'][factjoke])
+            while speaking and not arrived:
+                pass
+            if arrived:
+                spiel = True
+                break
+            festival(rx)
+        except Exception as e:
+            print e
+        finally:
+            sl = r.random()
+            print "Not arrived yet - sleeping for %s" % sl        
+            time.sleep(sl)
 
 def done(message):
     global spiel
@@ -100,11 +125,30 @@ def done(message):
     else:
         spiel = False
 
+def goal_reached(message):
+    global place, arrived
+    print "Arrived: %s" % arrived
+    if 'Goal reached' in message.data and not arrived:
+        arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the . . . %s']
+        msg = r.choice(arrive) % place
+        while speaking or spiel:
+            pass
+        festival(msg)
+        arrived = True
+        print "Yes Arrived: %s" % arrived
+
+
+def festival(say):
+    global speaking
+    speaking = True
+    subprocess.call(["festival", "--batch", "(SayText \"" + say + "\")"])
+    speaking = False 
+
 def nav_spiel():
     rospy.init_node('nav_spiel', anonymous=True)
     rospy.Subscriber("/spiel", String, callback)
     rospy.Subscriber("/done", String, done)
-
+    rospy.Subscriber("/move_base/result", String, goal_reached)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
    
