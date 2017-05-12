@@ -7,7 +7,7 @@ from std_msgs.msg import String
 import random as r
 import time
 import subprocess
-from move_base_msgs.msg import MoveBaseAction
+from actionlib_msgs.msg import GoalStatusArray
 
 # Set current working directory
 cwd = os.chdir(os.path.dirname(os.path.realpath(__file__)) + '/../');
@@ -150,6 +150,18 @@ def goal_reached(message):
         arrived = True
         print "Yes Arrived: %s" % arrived
 
+def goal_reached_action(message):
+    global place, arrived, spiel, speaking
+    print "Arrived: %s" % arrived
+    if 'Goal reached' in message.status_list[-1].text and not arrived:
+        arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the %s . . . ', 'This is the %s . . . ']
+        msg = r.choice(arrive) % place
+        while speaking or spiel:
+            pass
+        festival(msg)
+        arrived = True
+        print "Yes Arrived: %s" % arrived
+
 
 def festival(say):
     global speaking
@@ -162,7 +174,7 @@ def nav_spiel():
     rospy.Subscriber("/spiel", String, callback)
     rospy.Subscriber("/done", String, done)
     rospy.Subscriber("/goal_reached", String, goal_reached)
-    rospy.Subscriber("/move_base/result", MoveBaseAction, goal_reached)
+    rospy.Subscriber("/move_base/status", GoalStatusArray, goal_reached_action)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
    
