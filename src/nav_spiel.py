@@ -38,16 +38,17 @@ spiel = True
 place = ''
 arrived = False
 speaking = False
+stop_all = False
 
 collect = 10
 
 def callback(message):
-    global spiel, place, arrived
+    global place, spiel, arrived, stop_all
     # topic = "PORTLAND STATE"
     # topic = "INTEL LAB"
     topic = locations[message.data]
     place = topic
-    count = 3
+    count = 2
     arrived = False
     rcvd = []   # Container for spiel
 
@@ -104,10 +105,11 @@ def callback(message):
     print "Arrived: %s" % arrived
     while not arrived and not spiel:
         try:
-            if arrived or spiel:
+            if arrived or stop_all:
                 spiel = True
                 msg = "OK. I'll stop."
                 festival(msg)
+                stop_all = False
                 break
             factjoke = r.choice(facts_or_jokes)
             rx = jeeves.respond(factjoke)
@@ -126,13 +128,17 @@ def callback(message):
             time.sleep(sl)
     arrived = False
     spiel = True
+    stop_all = False
 
 def done(message):
-    global spiel
+    global spiel, stop_all
     if message.data == "no":
         spiel = True
+        arrived = False
+        stop_all = False
     else:
         spiel = False
+        stop_all = True
 
 def goal_reached(message):
     global place, arrived, spiel, speaking
