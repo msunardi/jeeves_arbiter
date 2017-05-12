@@ -7,9 +7,7 @@ from std_msgs.msg import String
 import random as r
 import time
 import subprocess
-import rospkg
-
-rospack = rospkg.RosPack()
+from move_base_msgs.msg import MoveBaseAction
 
 # Set current working directory
 cwd = os.chdir(os.path.dirname(os.path.realpath(__file__)) + '/../');
@@ -48,7 +46,7 @@ def callback(message):
     # topic = "INTEL LAB"
     topic = locations[message.data]
     place = topic
-    count = 2
+    count = 5
     arrived = False
     rcvd = []   # Container for spiel
 
@@ -163,8 +161,8 @@ def nav_spiel():
     rospy.init_node('nav_spiel', anonymous=True)
     rospy.Subscriber("/spiel", String, callback)
     rospy.Subscriber("/done", String, done)
-    rospy.Subscriber("/move_base/result", String, goal_reached)
-    # rospy.Subscriber("/move_base/result", MoveBaseAction, goal_reached)
+    rospy.Subscriber("/goal_reached", String, goal_reached)
+    rospy.Subscriber("/move_base/result", MoveBaseAction, goal_reached)
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
    
