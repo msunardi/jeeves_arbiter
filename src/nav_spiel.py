@@ -9,6 +9,7 @@ from std_msgs.msg import String
 import random as r
 import time
 import subprocess
+import redis
 from actionlib_msgs.msg import GoalStatusArray
 
 class NavSpiel(threading.Thread):
@@ -22,12 +23,14 @@ class NavSpiel(threading.Thread):
         self.jeeves.learn(cwd + "jeeves.xml")
         self.jeeves.respond('load aiml b') #finished initializing
 
+        self.r = redis.Redis()
+
         self.locations = {'ee': 'EE FISHBOWL', \
                     'NEAR_lab': 'NEAR LAB', \
                     'near_lab': 'NEAR LAB', \
                     'robot_lab': 'ROBOTICS LAB', \
-                    'Biomedical_lab': 'BIOMEDICAL SIGNAL LAB', \
-                    'biomedical_lab': 'BIOMEDICAL SIGNAL LAB', \
+                    'Biomedical_lab': 'BIOMEDICAL SIGNAL PROCESSING LAB', \
+                    'biomedical_lab': 'BIOMEDICAL SIGNAL PROCESSING LAB', \
                     'stairs': 'EB STAIRS', \
                     'portland_state': 'PORTLAND STATE', \
                     'portland_state_university': 'PORTLAND STATE'}
@@ -68,6 +71,7 @@ class NavSpiel(threading.Thread):
         self.place = topic
         self.arrived = False
         rcvd = []   # Container for spiel
+        self.r.set('current_target', topic)
 
         # Probability of inserting a joke/fact
         jk_prob = 0.05
@@ -162,20 +166,22 @@ class NavSpiel(threading.Thread):
         print "Arrived: %s" % self.arrived
         if 'Goal reached' in message.data and not self.arrived:
             arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the %s . . . ', 'This is the %s . . . ']
-            msg = r.choice(arrive) % self.place
-            while self.speaking or self.spiel:
-                pass
+            #msg = r.choice(arrive) % self.place
+            msg = r.choice(arrive) % self.r.get('current_target')
+            if self.speaking or self.spiel:
+                return
             self.festival(msg)
             self.arrived = True
             print "Yes Arrived: %s" % self.arrived
 
     def goal_reached_action(self, message):
-        print "True Arrived: %s" % self.arrived
+        print "True Arrived: %s - %s" % (self.arrived, self.place)
         if 'Goal reached' in message.status_list[-1].text and not self.arrived:
             arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the %s . . . ', 'This is the %s . . . ']
-            msg = r.choice(arrive) % self.place
-            while self.speaking or self.spiel:
-                pass
+            #msg = r.choice(arrive) % self.place
+            msg = r.choice(arrive) % self.r.get('current_target')
+            if self.speaking or self.spiel:
+                return
             self.festival(msg)
             self.arrived = True
             print "Yes Arrived: %s" % self.arrived

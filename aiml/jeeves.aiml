@@ -582,7 +582,7 @@
 </category>
 
 <category>
-   <pattern>BIOMEDICAL SIGNAL LAB</pattern>
+   <pattern>BIOMEDICAL SIGNAL PROCESSING LAB</pattern>
    <template>
       <random>
          <li>The mission of the BSP lab is to increase our collective knowledge of how useful information can be extracted from physiologic signals.</li>
