@@ -170,15 +170,20 @@ class NavSpiel(threading.Thread):
 
     def goal_reached_action(self, message):
         print "True Arrived: %s - %s" % (self.arrived, self.place)
-        if 'Goal reached' in message.status_list[-1].text and not self.arrived:
-            arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the %s . . . ', 'This is the %s . . . ']
-            #msg = r.choice(arrive) % self.place
-            msg = r.choice(arrive) % self.r.get('current_target')
-            if self.speaking or self.spiel:
-                return
-            self.festival(msg)
-            self.arrived = True
-            print "Yes Arrived: %s" % self.arrived
+        try:
+            if 'Goal reached' in message.status_list[-1].text and not self.arrived:
+                arrive = ['We have reached %s.', 'Well, here we are . . . %s', 'Welcome to the %s . . . ', 'This is the %s . . . ']
+                #msg = r.choice(arrive) % self.place
+                msg = r.choice(arrive) % self.r.get('current_target')
+                if self.speaking or self.spiel:
+                    return
+                self.festival(msg)
+                self.arrived = True
+                print "Yes Arrived: %s" % self.arrived
+        except IndexError as e:
+            warn = "Arbiter.nav_spiel.py: Not receiving GoalStatusArray.status_list yet."
+            rospy.logwarn(warn)
+            print warn
 
     def festival(self, say):
         self.speaking = True
