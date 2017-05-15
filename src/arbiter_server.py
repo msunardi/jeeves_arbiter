@@ -23,14 +23,14 @@ def handler(request):
     response = "I don't know what you're asking"
 
     # Make decisions based on type
-    if itype == 'nav':
+    if itype in ['nav', 'info']:
         response = "Navigation request to: %s" % val
         p = r.choice(prompt)
         msg = r.choice(['Ah, ... ', '']) +  description + ', ...  ' + p
         # nav_say.publish(msg)
         festival(msg)
 
-        spiel.publish(val)
+        spiel.publish('%s:%s' % (itype, val))
 
         #rospy.wait_for_service('waypoint')
         #rospy.loginfo("Attempting nav: %s" % val)

@@ -65,7 +65,9 @@ class NavSpiel(threading.Thread):
 
         # topic = "PORTLAND STATE"
         # topic = "INTEL LAB"
-        topic = self.locations[message.data]
+        # topic = self.locations[message.data]
+        itype, loc = message.data.split(':')
+        topic = self.locations[loc]
         self.place = topic
         self.arrived = False
         rcvd = []   # Container for spiel
@@ -119,6 +121,10 @@ class NavSpiel(threading.Thread):
         else:
             self.spiel = False
         print "After spiel - Arrived: %s" % self.arrived
+
+        if itype != 'nav':
+            return
+        
         while not self.arrived and not self.spiel:
             try:
                 if self.arrived or self.stop_all:
