@@ -650,6 +650,37 @@
    </template>
 </category>
 
+<category>
+   <pattern>PORTLAND STATE AEROSPACE SOCIETY</pattern>
+   <template>
+      <random>
+         <li>The Portland State Aerospace Society is made up of students and industry volunteers who build custom rockets and satellites.</li>
+         <li>PSAS (PE-SAAS) is developing many unique technologies including a electric pump and a fiber-glass fuel tank.</li>
+         <li>Why did the cow go in the spaceship?​ ​... It wanted to see the mooooooon!</li>
+         <li>PSAS has created and launched rocket launches since 1995.</li>
+         <li>Undergraduates are routinely put in charge of important projects​. Often this experience has led to jobs in industry.</li>
+         <li>PSAS members have graduated and gone on to work for Boeing, NASA, and SpaceX.</li>
+         <li>NASA has offered to take the small satellite, a cube-sat, created by PSAS and launch it into outer space from the International Space Station.</li>
+         <li>The satellite PSAS is making is called OreSat for Oregon and will beam streaming video of Oregon to high school's across the state.</li>
+         <li>Why did the people not like the restaurant on the moon? ... Because there was no atmosphere​!​</li>
+         <li>PSAS people love talking about Space, please knock or enter and say hi. Ask them about the secret plans to send a probe to Jupiter!</li>
+      </random>
+   </template>
+</category>
+
+<category>
+   <pattern>P S A S</pattern>
+   <template>
+      <srai>PORTLAND STATE AEROSPACE SOCIETY</srai>
+   </template>
+</category>
+<category>
+   <pattern>PSAS</pattern>
+   <template>
+      <srai>PORTLAND STATE AEROSPACE SOCIETY</srai>
+   </template>
+</category>
+
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 <!--                                                         Things                                                                -->
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
